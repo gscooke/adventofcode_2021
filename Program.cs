@@ -2,6 +2,7 @@
 Console.WriteLine("Starting Advent of Code Puzzles!");
 
 List<IPuzzle> puzzles = new() {
+    new Day1(),
     new Day2()
 };
 
