@@ -69,7 +69,7 @@ internal class Day2 : BasePuzzle, IPuzzle
     }
 }
 
-internal readonly record struct Movement(MovementType InputDirection, int InputAmount) {
+internal record Movement(MovementType InputDirection, int InputAmount) {
     public int DepthChange {
         get {
             switch (InputDirection)
