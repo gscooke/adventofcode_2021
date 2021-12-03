@@ -6,7 +6,8 @@ internal class BasePuzzle {
         inputFilename = $"inputs/{puzzleName}.txt";
     }
 
-    internal List<string> InputsList => File.ReadAllLines(inputFilename).ToList();
+    internal List<string> InputsList => File.ReadAllLines(inputFilename).Select(e => e.Trim()).ToList();
     internal byte[] InputsBytearray => File.ReadAllBytes(inputFilename);
     internal List<char> InputsListChar => InputsBytearray.Select(e => (char)e).ToList();
+    internal List<int> InputsListInt => InputsList.Select(int.Parse).ToList();
 }

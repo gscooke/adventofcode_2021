@@ -1,4 +1,6 @@
-internal class Day1 : BasePuzzle, IPuzzle
+namespace Day1;
+
+internal class Puzzle : BasePuzzle, IPuzzle
 {
     public void Run() {
         StartPuzzleOutput(nameof(Day1));
@@ -7,7 +9,7 @@ internal class Day1 : BasePuzzle, IPuzzle
         Part2();
     }
 
-    internal void Part1() {
+    private void Part1() {
         var inputs = InputsList.Select(int.Parse).ToList();
         var increases = CountValueIncreases(inputs);
 
@@ -15,7 +17,7 @@ internal class Day1 : BasePuzzle, IPuzzle
         Console.WriteLine($"  Increases: {increases}");
     }
 
-    internal void Part2() {
+    private void Part2() {
         var inputs = InputsList.Select(int.Parse).ToList();
         List<int> windows = new();
 
@@ -32,7 +34,7 @@ internal class Day1 : BasePuzzle, IPuzzle
         Console.WriteLine($"  Increases: {increases}");
     }
 
-    internal int CountValueIncreases(List<int> values) {
+    private int CountValueIncreases(List<int> values) {
         int currentValue = values[0];
         int increases = 0;
         values.RemoveAt(0);
@@ -48,7 +50,7 @@ internal class Day1 : BasePuzzle, IPuzzle
         return increases;
     }
 
-    internal bool TryGetSlidingWindow(List<int> inputs, int startLine, out int value)
+    private bool TryGetSlidingWindow(List<int> inputs, int startLine, out int value)
     {
         const int windowSize = 3;
         value = 0;

@@ -1,4 +1,6 @@
-internal class Day2 : BasePuzzle, IPuzzle
+namespace Day2;
+
+internal class Puzzle : BasePuzzle, IPuzzle
 {
     public void Run() {
         StartPuzzleOutput(nameof(Day2));
@@ -7,7 +9,7 @@ internal class Day2 : BasePuzzle, IPuzzle
         Part2();
     }
 
-    internal void Part1() {
+    private void Part1() {
         var movements = ParseInputs(InputsList);
 
         int position = 0;
@@ -31,7 +33,7 @@ internal class Day2 : BasePuzzle, IPuzzle
         Console.WriteLine($"  Result: {position * depth}");
     }
 
-    internal void Part2() {
+    private void Part2() {
         var movements = ParseInputs(InputsList);
 
         int position = 0;
@@ -57,7 +59,7 @@ internal class Day2 : BasePuzzle, IPuzzle
         Console.WriteLine($"  Result: {position * depth}");
     }
 
-    internal List<Movement> ParseInputs(List<string> inputs) {
+    private List<Movement> ParseInputs(List<string> inputs) {
         return inputs.Select(e => ParseMovement(e)).ToList();
     }
 
@@ -65,18 +67,18 @@ internal class Day2 : BasePuzzle, IPuzzle
         string[] inputs = input.Split(' ');
         return new((MovementType)Enum.Parse(typeof(MovementType), inputs[0], true), int.Parse(inputs[1]));
     }
-}
 
-internal record Movement(MovementType InputDirection, int InputAmount) {
-    public int DepthChange {
-        get {
-            switch (InputDirection)
-            {
-                case MovementType.Up:
-                    return -InputAmount;
+    internal record Movement(MovementType InputDirection, int InputAmount) {
+        public int DepthChange {
+            get {
+                switch (InputDirection)
+                {
+                    case MovementType.Up:
+                        return -InputAmount;
 
-                default:
-                    return InputAmount;
+                    default:
+                        return InputAmount;
+                }
             }
         }
     }

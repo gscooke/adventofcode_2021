@@ -4,8 +4,9 @@ Console.WriteLine("Starting Advent of Code Puzzles!");
 var playAll = true;
 
 List<IPuzzle> puzzles = new() {
-    new Day1(),
-    new Day2()
+    new Day1.Puzzle(),
+    new Day2.Puzzle(),
+    new Day3.Puzzle()
 };
 
 if (playAll) {
