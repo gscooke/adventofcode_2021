@@ -8,8 +8,7 @@ internal class Day2 : BasePuzzle, IPuzzle
     }
 
     internal void Part1() {
-        var inputs = LoadInputs("day_2.txt");
-        var movements = ParseInputs(inputs);
+        var movements = ParseInputs(InputsList);
 
         int position = 0;
         int depth = 0;
@@ -33,8 +32,7 @@ internal class Day2 : BasePuzzle, IPuzzle
     }
 
     internal void Part2() {
-        var inputs = LoadInputs("day_2.txt");
-        var movements = ParseInputs(inputs);
+        var movements = ParseInputs(InputsList);
 
         int position = 0;
         int depth = 0;

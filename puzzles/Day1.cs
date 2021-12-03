@@ -8,7 +8,7 @@ internal class Day1 : BasePuzzle, IPuzzle
     }
 
     internal void Part1() {
-        var inputs = LoadInputs("day_1.txt").Select(int.Parse).ToList();
+        var inputs = InputsList.Select(int.Parse).ToList();
         var increases = CountValueIncreases(inputs);
 
         Console.WriteLine($" Part 1:");
@@ -16,7 +16,7 @@ internal class Day1 : BasePuzzle, IPuzzle
     }
 
     internal void Part2() {
-        var inputs = LoadInputs("day_1.txt").Select(int.Parse).ToList();
+        var inputs = InputsList.Select(int.Parse).ToList();
         List<int> windows = new();
 
         for (int index = 0; index < inputs.Count; index++) {
