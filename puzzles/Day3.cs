@@ -11,17 +11,16 @@ internal class Puzzle : BasePuzzle, IPuzzle
 
     private void Part1() {
         var inputs = InputsList;
-        List<List<char>> columns = new();
+        List<string> pivot = new();
         
         for (int i = 0; i < inputs[0].Length; i++) {
-            columns.Add(
-                inputs.Select(e => e.Substring(i, 1).First()).ToList()
+            pivot.Add(
+                string.Join("", inputs.Select(e => e.Substring(i, 1)))
             );
         }
 
-        var colval = columns.Select(e => e.Count(v => v == '0') > e.Count(v => v == '1') ? 0 : 1).ToList();
-        var gammaRateBinary = string.Join("", colval);
-        var epsilonRateBinary = string.Join("", colval.Select(e => e == 0 ? '1' : '0'));
+        var gammaRateBinary = string.Join("", pivot.Select(e => e.Count(v => v == '0') > e.Count(v => v == '1') ? 0 : 1));
+        var epsilonRateBinary = string.Join("", gammaRateBinary.ToCharArray().Select(e => e == '0' ? '1' : '0'));
 
         var gammaRate = Convert.ToInt32(gammaRateBinary, 2);
         var epsilonRate = Convert.ToInt32(epsilonRateBinary, 2);
