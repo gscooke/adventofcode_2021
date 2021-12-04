@@ -13,8 +13,7 @@ internal class Puzzle : BasePuzzle, IPuzzle
     private void Part1()
     {
         var inputs = InputsList;
-        var calledNumbers = inputs[0].Split(',').Where(e => !string.IsNullOrWhiteSpace(e)).Select(int.Parse).ToList();
-        inputs.RemoveAt(0);
+        var calledNumbers = ExtractCalledNumbers(inputs);
 
         var bingoBoards = PopulateBingoBoards(inputs);
 
@@ -41,8 +40,7 @@ internal class Puzzle : BasePuzzle, IPuzzle
     private void Part2()
     {
         var inputs = InputsList;
-        var calledNumbers = inputs[0].Split(',').Where(e => !string.IsNullOrWhiteSpace(e)).Select(int.Parse).ToList();
-        inputs.RemoveAt(0);
+        var calledNumbers = ExtractCalledNumbers(inputs);
 
         var bingoBoards = PopulateBingoBoards(inputs);
 
@@ -85,6 +83,12 @@ internal class Puzzle : BasePuzzle, IPuzzle
         return bingoBoards;
     }
 
+    private List<int> ExtractCalledNumbers(List<string> inputs) {
+        var calledNumbers = inputs[0].Split(',').Where(e => !string.IsNullOrWhiteSpace(e)).Select(int.Parse).ToList();
+        inputs.RemoveAt(0);
+        return calledNumbers;
+    }
+
     private class BingoBoard
     {
         public BingoBoard() {
@@ -118,7 +122,7 @@ internal class Puzzle : BasePuzzle, IPuzzle
 
         public bool HasWinningLine {
             get {
-                return Lines.Any(e => e.IsComplete) || Columns.Any(e => e.IsComplete);
+                return Lines.Any(e => e.IsWinningLine) || Columns.Any(e => e.IsWinningLine);
             }
         }
 
@@ -136,7 +140,7 @@ internal class Puzzle : BasePuzzle, IPuzzle
             this.Where(e => e.Value == calledNumber).ToList().ForEach(e => e.Marked = true);
         }
 
-        public bool IsComplete {
+        public bool IsWinningLine {
             get {
                 return this.All(e => e.Marked);
             }
