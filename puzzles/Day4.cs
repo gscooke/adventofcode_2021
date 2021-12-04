@@ -41,21 +41,8 @@ internal class Puzzle : BasePuzzle, IPuzzle
         var bingoBoards = PopulateBingoBoards(inputs);
 
         var calledNumberIndex = 0;
-        // while (bingoBoards.Any(e => !e.HasWinningLine))
-        // {
-        //     var calledNumber = calledNumbers[calledNumberIndex];
-        //     bingoBoards.ForEach(e => e.CallNumber(calledNumber));
-
-        //     if (bingoBoards.Count > 1)
-        //         bingoBoards.RemoveAll(e => e.HasWinningLine);
-
-        //     if (bingoBoards.All(e => !e.HasWinningLine))
-        //         calledNumberIndex++;
-        // }
-        
-        bool continueLoop = true;
         BingoBoard? lastBoard = null;
-        while (continueLoop)
+        while (bingoBoards.Any(e => !e.HasWinningLine))
         {
             var calledNumber = calledNumbers[calledNumberIndex];
             bingoBoards.ForEach(e => e.CallNumber(calledNumber));
