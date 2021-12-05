@@ -4,13 +4,14 @@ internal class Puzzle : BasePuzzle, IPuzzle
 {
     public void Run()
     {
+        Console.ResetColor();
         StartPuzzleOutput(nameof(Day4));
 
-        Part1();
+        Part1().Wait();
         Part2();
     }
 
-    private void Part1()
+    private async Task Part1()
     {
         var inputs = InputsList;
         var calledNumbers = ExtractCalledNumbers(inputs);
@@ -20,13 +21,17 @@ internal class Puzzle : BasePuzzle, IPuzzle
         var calledNumberIndex = 0;
         while (bingoBoards.All(e => !e.HasWinningLine))
         {
+            VisualiseBoards(bingoBoards);
             var calledNumber = calledNumbers[calledNumberIndex];
             bingoBoards.ForEach(e => e.CallNumber(calledNumber));
 
             if (bingoBoards.All(e => !e.HasWinningLine))
                 calledNumberIndex++;
+
+            await Task.Delay(500);
         }
 
+        VisualiseBoards(bingoBoards);
         var winningBoard = bingoBoards.First(e => e.HasWinningLine);
 
         Console.WriteLine($" Part 1:");
@@ -58,6 +63,23 @@ internal class Puzzle : BasePuzzle, IPuzzle
 
         Console.WriteLine($" Part 2:");
         Console.WriteLine($"  Winning Board Score: {lastBoard?.Score}");
+    }
+
+    private void VisualiseBoards(List<BingoBoard> bingoBoards) {
+        Console.Clear();
+        for (int skip = 0; skip < bingoBoards.Count; skip += 11) {
+            var bingoBoardsToRender = bingoBoards.Skip(skip).Take(12);
+            for (int lineIndex = 0; lineIndex < 5; lineIndex++) {
+                foreach(var bingoBoard in bingoBoardsToRender) {
+                    bingoBoard.Render(lineIndex);
+                    Console.Write("  ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+        Console.ResetColor();
     }
 
     private List<BingoBoard> PopulateBingoBoards(List<string> inputs)
@@ -156,6 +178,14 @@ internal class Puzzle : BasePuzzle, IPuzzle
                 return UnmarkedValues.Sum() * LastNumberCalled;
             }
         }
+
+        public void Render(int lineIndex) {
+            ConsoleColor? backgroundcolor = HasWinningLine ? ConsoleColor.Green : null;
+            foreach(var value in Lines[lineIndex])
+            {
+                value.Render(backgroundcolor);
+            }
+        }
     }
 
     private class BingoLine : List<BingoBoardValue>
@@ -180,6 +210,11 @@ internal class Puzzle : BasePuzzle, IPuzzle
                 return this.Where(e => !e.Marked).Select(e => e.Value).ToList();
             }
         }
+
+        public override string ToString()
+        {
+            return string.Join(" ", this.Select(e => e.Value));
+        }
     }
 
     private class BingoBoardValue
@@ -190,5 +225,19 @@ internal class Puzzle : BasePuzzle, IPuzzle
         }
         public int Value { get; set; }
         public bool Marked { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Value} {(Marked ? "[X]" : "[0]")}";
+        }
+
+        public void Render(ConsoleColor? backgroundColor = null) {
+            var value = Value.ToString().PadLeft(2) + " ";
+            if (backgroundColor.HasValue)
+                Console.BackgroundColor = backgroundColor.Value;
+            Console.ForegroundColor = (Marked ? ConsoleColor.White : ConsoleColor.Red);
+            Console.Write(value);
+            Console.ResetColor();
+        }
     }
 }
