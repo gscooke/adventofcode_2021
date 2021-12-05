@@ -12,7 +12,9 @@ internal class Puzzle : BasePuzzle, IPuzzle
     }
 
     private void Part1() {
-        var inputs = InputsList.Select(e => new Ventline(e)).Where(e => e.VentDirection != VentDirection.Diagonal).ToList();
+        var inputs = InputsList.Select(e => new Ventline(e))
+                               .Where(e => e.VentDirection != VentDirection.Diagonal)
+                               .ToList();
         var map = BuildMap(inputs);
         PlotVentlines(map, inputs);
 
@@ -29,7 +31,8 @@ internal class Puzzle : BasePuzzle, IPuzzle
     }
 
     private void Part2() {
-        var inputs = InputsList.Select(e => new Ventline(e)).ToList();
+        var inputs = InputsList.Select(e => new Ventline(e))
+                               .ToList();
         var map = BuildMap(inputs);
         PlotVentlines(map, inputs);
 
