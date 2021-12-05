@@ -13,6 +13,8 @@ internal class Puzzle : BasePuzzle, IPuzzle
 
     private async Task Part1()
     {
+        ColorPallette colorPallette = new();
+
         var inputs = InputsList;
         var calledNumbers = ExtractCalledNumbers(inputs);
 
@@ -21,7 +23,7 @@ internal class Puzzle : BasePuzzle, IPuzzle
         var calledNumberIndex = 0;
         while (bingoBoards.All(e => !e.HasWinningLine))
         {
-            VisualiseBoards(bingoBoards);
+            VisualiseBoards(bingoBoards, calledNumbers, calledNumberIndex, colorPallette);
             var calledNumber = calledNumbers[calledNumberIndex];
             bingoBoards.ForEach(e => e.CallNumber(calledNumber));
 
@@ -31,7 +33,7 @@ internal class Puzzle : BasePuzzle, IPuzzle
             await Task.Delay(500);
         }
 
-        VisualiseBoards(bingoBoards);
+        VisualiseBoards(bingoBoards, calledNumbers, calledNumberIndex, colorPallette);
         var winningBoard = bingoBoards.First(e => e.HasWinningLine);
 
         Console.WriteLine($" Part 1:");
@@ -65,21 +67,23 @@ internal class Puzzle : BasePuzzle, IPuzzle
         Console.WriteLine($"  Winning Board Score: {lastBoard?.Score}");
     }
 
-    private void VisualiseBoards(List<BingoBoard> bingoBoards) {
+    private void VisualiseBoards(List<BingoBoard> bingoBoards, List<int> CalledNumbers, int CalledNumberIndex, ColorPallette colorPallette) {
         Console.Clear();
-        for (int skip = 0; skip < bingoBoards.Count; skip += 11) {
+        for (int skip = 0; skip < bingoBoards.Count; skip += 12) {
             var bingoBoardsToRender = bingoBoards.Skip(skip).Take(12);
             for (int lineIndex = 0; lineIndex < 5; lineIndex++) {
                 foreach(var bingoBoard in bingoBoardsToRender) {
-                    bingoBoard.Render(lineIndex);
+                    bingoBoard.Render(lineIndex, colorPallette);
                     Console.Write("  ");
                 }
                 Console.WriteLine();
             }
             Console.WriteLine();
-            Console.WriteLine();
         }
         Console.ResetColor();
+
+        var numbersCalled = string.Join(", ", CalledNumbers.GetRange(0, CalledNumberIndex + 1));
+        Console.WriteLine($"Numbers Called: {numbersCalled}");
     }
 
     private List<BingoBoard> PopulateBingoBoards(List<string> inputs)
@@ -179,11 +183,11 @@ internal class Puzzle : BasePuzzle, IPuzzle
             }
         }
 
-        public void Render(int lineIndex) {
+        public void Render(int lineIndex, ColorPallette colorPallette) {
             ConsoleColor? backgroundcolor = HasWinningLine ? ConsoleColor.Green : null;
             foreach(var value in Lines[lineIndex])
             {
-                value.Render(backgroundcolor);
+                value.Render(HasWinningLine, Lines[lineIndex].IsWinningLine, colorPallette);
             }
         }
     }
@@ -231,13 +235,43 @@ internal class Puzzle : BasePuzzle, IPuzzle
             return $"{Value} {(Marked ? "[X]" : "[0]")}";
         }
 
-        public void Render(ConsoleColor? backgroundColor = null) {
+        public void Render(bool IsWinningBoard, bool IsWinningLine, ColorPallette colorPallette) {
             var value = Value.ToString().PadLeft(2) + " ";
-            if (backgroundColor.HasValue)
-                Console.BackgroundColor = backgroundColor.Value;
-            Console.ForegroundColor = (Marked ? ConsoleColor.White : ConsoleColor.Red);
+            colorPallette.ResetColor();
+
+            if (IsWinningBoard) {
+                Console.BackgroundColor = colorPallette.WinningBoardBackgroundColor;
+                Console.ForegroundColor = colorPallette.DefaultForegroundColor;
+
+                if (Marked && IsWinningLine) {
+                    Console.ForegroundColor = colorPallette.WinningLineNumberColor;
+                }
+                else if (Marked) {
+                    Console.ForegroundColor = colorPallette.WinningMatchedNumberColor;
+                }
+            }
+            else {
+                Console.ForegroundColor = colorPallette.DefaultForegroundColor;
+                if (Marked) {
+                    Console.ForegroundColor = colorPallette.DefaultMatchedNumberColor;
+                }
+            }
+            
             Console.Write(value);
+            colorPallette.ResetColor();
+        }
+    }
+
+    private class ColorPallette {
+        public ConsoleColor DefaultForegroundColor { get; set; } = ConsoleColor.Red;
+        public ConsoleColor DefaultMatchedNumberColor { get; set; } = ConsoleColor.White;
+        public ConsoleColor WinningLineNumberColor { get; set; } = ConsoleColor.Black;
+        public ConsoleColor WinningMatchedNumberColor { get; set; } = ConsoleColor.White;
+        public ConsoleColor WinningBoardBackgroundColor { get; set; } = ConsoleColor.DarkGreen;
+
+        public void ResetColor() {
             Console.ResetColor();
+            Console.ForegroundColor = DefaultForegroundColor;
         }
     }
 }
