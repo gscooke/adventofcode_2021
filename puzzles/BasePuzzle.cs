@@ -10,4 +10,5 @@ internal class BasePuzzle {
     internal byte[] InputsBytearray => File.ReadAllBytes(inputFilename);
     internal List<char> InputsListChar => InputsBytearray.Select(e => (char)e).ToList();
     internal List<int> InputsListInt => InputsList.Select(int.Parse).ToList();
+    internal List<int> InputsSplitListInt => InputsList[0].Split(',').Select(int.Parse).ToList();
 }
