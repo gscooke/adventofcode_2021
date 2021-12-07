@@ -37,12 +37,7 @@ internal class Puzzle : BasePuzzle, IPuzzle
         Tuple<int, int> bestAlignment = new(int.MaxValue, int.MaxValue);
         for (int i = 5; i <= max; i++) {
             var fuelUsed = crabs.Select(startPosition => (i < startPosition) ? startPosition - i : i - startPosition)
-                                .Select((movements) => {
-                                    var fuelRequired = 0;
-                                    for(int m = 1; m <= movements; m++)
-                                        fuelRequired += m;
-                                    return fuelRequired;
-                                }).ToList();
+                                .Select(movements => ((movements * movements) + movements) / 2).ToList();
             if (fuelUsed.Sum() < bestAlignment.Item2)
                 bestAlignment = new(i, fuelUsed.Sum());
         }
