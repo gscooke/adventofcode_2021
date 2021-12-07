@@ -9,7 +9,8 @@ List<IPuzzle> puzzles = new() {
     new Day3.Puzzle(),
     new Day4.Puzzle(),
     new Day5.Puzzle(),
-    new Day6.Puzzle()
+    new Day6.Puzzle(),
+    new Day7.Puzzle()
 };
 
 if (playAll) {
